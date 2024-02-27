@@ -45,7 +45,7 @@ public class VehicleController : MonoBehaviour
             _rb.MoveRotation(_rb.rotation * rotationChange);
         }
 
-        _rb.angularVelocity = Vector3.zero;
+        //_rb.angularVelocity = Vector3.zero;
 
         if (_rb.velocity.magnitude > 0.1)
         {
