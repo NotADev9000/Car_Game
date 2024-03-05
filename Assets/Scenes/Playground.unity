@@ -12954,6 +12954,7 @@ MonoBehaviour:
   _maxSpeed: 25
   _acceleration: 15
   _rotationSpeed: 10
+  _gripFactor: 0.5
   _applyForceForward: 0
   _applyForceDown: -0.35
 --- !u!54 &768724516

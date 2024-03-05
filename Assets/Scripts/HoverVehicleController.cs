@@ -21,6 +21,7 @@ public class HoverVehicleController : MonoBehaviour
     [SerializeField] private float _maxSpeed = 25f; // m/s
     [SerializeField] private float _acceleration = 15f;  // m/s^2
     [SerializeField] private float _rotationSpeed = 60f; // deg/s
+    [SerializeField][Range(0, 1)][Tooltip("0 = no grip")] private float _gripFactor = 0.5f;
 
     [Header("Force Settings")]
     [SerializeField] private float _applyForceForward = 0f;
@@ -102,6 +103,12 @@ public class HoverVehicleController : MonoBehaviour
 
         if (_isGrounded)
         {
+            // TRACTION
+            float sidewaysVelocity = Vector3.Dot(transform.right, _rb.velocity);
+            float oppositeTractionVelocity = -sidewaysVelocity * _gripFactor;
+            Vector3 tractionForce = transform.right * (oppositeTractionVelocity / Time.fixedDeltaTime);
+            _rb.AddForce(tractionForce, ForceMode.Acceleration);
+
             // STEERING
             if (_rb.velocity.magnitude > 0.0f)
             {
