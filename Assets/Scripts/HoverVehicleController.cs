@@ -38,7 +38,6 @@ public class HoverVehicleController : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        //_rb.centerOfMass = _centreOfMass.localPosition;
     }
 
     private void OnEnable()
@@ -135,8 +134,6 @@ public class HoverVehicleController : MonoBehaviour
 
         if (accel.sqrMagnitude > maxAccel * maxAccel)
             accel = accel.normalized * maxAccel;
-
-        //_rb.AddForce(accel, ForceMode.Acceleration);
 
         _rb.AddForceAtPosition(accel, applyForceAt, ForceMode.Acceleration);
     }
