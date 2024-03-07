@@ -10,30 +10,30 @@ using UnityEngine;
 public class HoverVehicleController : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
+    private Vector2 _inputVector;
 
     [Header("Suspension Settings")]
-    [SerializeField] private Transform[] _wheels = Array.Empty<Transform>();
-    [SerializeField] private float _suspensionLength = 0.6f;
-    [SerializeField] private float _springStrength = 5f;
-    [SerializeField] private float _springDamper = 2f;
+    [SerializeField] private Transform[] _springs = Array.Empty<Transform>();
+    [SerializeField] private float _suspensionRestLength = 0.5f;
+    [SerializeField] private float _suspensionStrength = 15f;
+    [SerializeField] private float _suspensionDamper = 2f;
 
-    [Header("Vehicle Settings")]
+    [Header("Movement Settings")]
     [SerializeField] private float _maxSpeed = 25f; // m/s
     [SerializeField] private float _acceleration = 15f;  // m/s^2
     [SerializeField] private float _rotationSpeed = 60f; // deg/s
-    [SerializeField][Range(0, 1)][Tooltip("0 = no grip")] private float _gripFactor = 0.5f;
+    [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _gripFactor = 0.5f;
 
     [Header("Force Settings")]
-    [SerializeField] private float _applyForceForward = 0f;
-    [SerializeField] private float _applyForceDown = 0f;
+    [SerializeField][Tooltip("Distance from center of mass to apply movement force")] private Vector3 _applyForceOffset = Vector3.zero;
 
     private Rigidbody _rb;
 
-    private Vector2 _inputVector;
-
     private List<Vector3> _suspensionContactNormals = new List<Vector3>();
-    private bool _isGrounded = false;
-    Vector3 applyForceAt;
+    private Vector3 _projectedDirection = Vector3.zero;
+
+    private Vector3 ApplyMovementForceAt => transform.position + _rb.centerOfMass + _applyForceOffset;
+    private bool IsGrounded => _suspensionContactNormals.Count > 1;
 
     private void Awake()
     {
@@ -45,86 +45,104 @@ public class HoverVehicleController : MonoBehaviour
         _inputReader.MoveEvent += OnMove;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        applyForceAt = transform.position + _rb.centerOfMass + (transform.forward * _applyForceForward) + (-transform.up * _applyForceDown);
+        _inputReader.MoveEvent -= OnMove;
+    }
+
+    private void OnMove(Vector2 moveVector)
+    {
+        _inputVector = moveVector;
     }
 
     private void FixedUpdate()
     {
+        UpdateSuspension();
+
+        if (IsGrounded)
+        {
+            UpdateProjectedDirection();
+
+            UpdateTraction();
+
+            UpdateSteering();
+
+            UpdateMovement();
+        }
+    }
+
+    private void UpdateSuspension()
+    {
         _suspensionContactNormals.Clear();
 
-        // SUSPENSION
-        Color debugColor;
-        RaycastHit hit;
-        foreach (Transform wheel in _wheels)
+        for (int i = 0; i < _springs.Length; i++)
         {
-            if (Physics.Raycast(wheel.position, -wheel.up, out hit, _suspensionLength))
+            Transform spring = _springs[i];
+            if (Physics.Raycast(spring.position, -spring.up, out RaycastHit hit, _suspensionRestLength))
             {
-                float compressionRatio = (float)Math.Round(1 - (hit.distance/_suspensionLength), 2);
-                float springOffsetForce = compressionRatio * _springStrength;
-                
-                Vector3 wheelWorldVelocity = _rb.GetPointVelocity(wheel.position); 
-                float springVelocity = Vector3.Dot(wheel.up, wheelWorldVelocity);
+                float compressionRatio = 1 - (hit.distance / _suspensionRestLength);
+                float springOffsetForce = compressionRatio * _suspensionStrength;
 
-                float force = springOffsetForce - (springVelocity * _springDamper);
+                Vector3 springWorldVelocity = _rb.GetPointVelocity(spring.position);
+                float springUpVelocity = Vector3.Dot(spring.up, springWorldVelocity);
 
-                _rb.AddForceAtPosition(force * wheel.up, wheel.position, ForceMode.Acceleration);
+                float suspensionForce = springOffsetForce - (springUpVelocity * _suspensionDamper);
+
+                _rb.AddForceAtPosition(suspensionForce * spring.up, spring.position, ForceMode.Acceleration);
 
                 _suspensionContactNormals.Add(hit.normal);
-
-                debugColor = Color.green;
-            } 
-            else
-            {
-                debugColor = Color.red;
             }
-
-            Debug.DrawRay(wheel.position, -wheel.up * _suspensionLength, debugColor);
         }
+    }
 
-        // grounded if at least 2 wheels are on ground
-        _isGrounded = _suspensionContactNormals.Count > 1;
+    /// <summary>
+    /// Applies a sideways force to prevent the vehicle from sliding
+    /// </summary>
+    private void UpdateTraction()
+    {
+        float sidewaysVelocity = Vector3.Dot(transform.right, _rb.velocity);
+        float desiredSidewaysVelocity = -sidewaysVelocity * _gripFactor;
+        Vector3 tractionForce = transform.right * (desiredSidewaysVelocity / Time.fixedDeltaTime);
 
-        // calculate the direction to accelerate the vehicle
-        // this is done to prevent the vehicle moving towards the sky/ground too much when tilted
-        // this is an average of all the surfaces the wheels touch
+        _rb.AddForce(tractionForce, ForceMode.Acceleration);
+    }
+
+    /// <summary>
+    /// Projects vehicle forward direction onto ground below
+    /// This is the average of each suspension contact point
+    /// </summary>
+    private void UpdateProjectedDirection()
+    {
         Vector3 suspensionContactAverage = Vector3.zero;
-        for (int i = 0; i < _suspensionContactNormals.Count; i++)
+        int suspensionContactAmount = _suspensionContactNormals.Count;
+
+        for (int i = 0; i < suspensionContactAmount; i++)
         {
             suspensionContactAverage += _suspensionContactNormals[i];
         }
-        if (_suspensionContactNormals.Count > 0) 
-            suspensionContactAverage = (suspensionContactAverage / _suspensionContactNormals.Count).normalized;
-        Vector3 projectedDirection = Vector3.ProjectOnPlane(transform.forward, suspensionContactAverage);
+        if (suspensionContactAmount > 0)
+            suspensionContactAverage = (suspensionContactAverage / suspensionContactAmount).normalized;
 
-        Debug.DrawRay(transform.position, projectedDirection * 3f, Color.green);
+        _projectedDirection = Vector3.ProjectOnPlane(transform.forward, suspensionContactAverage);
+    }
 
-        if (_isGrounded)
+    private void UpdateSteering()
+    {
+        if (_rb.velocity.magnitude > 0.1f)
         {
-            // TRACTION
-            float sidewaysVelocity = Vector3.Dot(transform.right, _rb.velocity);
-            float oppositeTractionVelocity = -sidewaysVelocity * _gripFactor;
-            Vector3 tractionForce = transform.right * (oppositeTractionVelocity / Time.fixedDeltaTime);
-            _rb.AddForce(tractionForce, ForceMode.Acceleration);
-
-            // STEERING
-            if (_rb.velocity.magnitude > 0.0f)
-            {
-                Vector3 steerForce = _inputVector.x * _rotationSpeed * Vector3.up;
-                _rb.AddTorque(steerForce, ForceMode.Acceleration);
-            }
-
-            // MOVEMENT
-            if (_inputVector.y != 0)
-            {
-                Vector3 force = _inputVector.y * _maxSpeed * projectedDirection;
-                force = new Vector3(force.x, _rb.velocity.y, force.z);
-                AccelerateTo(force, _acceleration);
-            }
+            Vector3 steerForce = _inputVector.x * _rotationSpeed * transform.up;
+            _rb.AddTorque(steerForce, ForceMode.Acceleration);
         }
+    }
 
-        Debug.DrawRay(applyForceAt, Vector3.down, Color.magenta);
+    private void UpdateMovement()
+    {
+        if (_inputVector.y != 0)
+        {
+            Vector3 force = _inputVector.y * _maxSpeed * _projectedDirection;
+            //force = new Vector3(force.x, _rb.velocity.y, force.z);
+            AccelerateTo(force, _acceleration);
+        }
     }
 
     private void AccelerateTo(Vector3 targetVelocity, float maxAccel)
@@ -135,11 +153,22 @@ public class HoverVehicleController : MonoBehaviour
         if (accel.sqrMagnitude > maxAccel * maxAccel)
             accel = accel.normalized * maxAccel;
 
-        _rb.AddForceAtPosition(accel, applyForceAt, ForceMode.Acceleration);
+        _rb.AddForceAtPosition(accel, ApplyMovementForceAt, ForceMode.Acceleration);
     }
 
-    private void OnMove(Vector2 moveVector)
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
     {
-        _inputVector = moveVector;
+        // movement direction
+        Debug.DrawRay(transform.position, _projectedDirection * 2f, Color.yellow);
+
+        // springs
+        for (int i = 0; i < _springs.Length; i++)
+        {
+            Transform spring = _springs[i];
+            Debug.DrawRay(spring.position, -spring.up * _suspensionRestLength, Color.green);
+        }
     }
+#endif
+
 }
