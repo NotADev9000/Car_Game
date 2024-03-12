@@ -308,19 +308,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: b7003b5d2579c0a498c60f9dedab5bba, type: 2}
-  _springs:
-  - {fileID: 8429510831303423303}
-  - {fileID: 6679451470767273578}
-  - {fileID: 2134681090111789196}
-  - {fileID: 6058806577215097728}
+  _suspensions:
+  - _transform: {fileID: 8429510831303423303}
+  - _transform: {fileID: 6679451470767273578}
+  - _transform: {fileID: 2134681090111789196}
+  - _transform: {fileID: 6058806577215097728}
   _suspensionRestLength: 0.6
-  _suspensionStrength: 15
+  _springStrength: 30
   _suspensionDamper: 2
-  _maxSpeed: 25
+  _maxSpeed: 15
   _acceleration: 15
   _rotationSpeed: 10
   _gripFactor: 0.5
-  _applyForceOffset: {x: 0, y: 0.35, z: 0}
+  _applyForceOffset: {x: 0, y: 0.25, z: 0}
 --- !u!1 &8872043083781698350
 GameObject:
   m_ObjectHideFlags: 0
