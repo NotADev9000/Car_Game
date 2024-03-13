@@ -26,6 +26,10 @@ public class HoverVehicleController : MonoBehaviour
     [Space(5)]
     [SerializeField] private float _dragOnGround = 0.5f;
     [SerializeField] private float _dragInAir = 0f;
+    [Space(5)]
+    [SerializeField] private float _timeBetweenVelocityTracking = 0.1f;
+    [SerializeField] private float _maxGroundAngle = 70f;
+
 
     [Header("Traction Settings")]
     [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _gripFactor = 0.5f;
@@ -64,8 +68,7 @@ public class HoverVehicleController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("HIT Enter");
-        _rb.velocity = new Vector3(_previousVel.x, _rb.velocity.y, _previousVel.z);
+        ApplyPreviousVelocityIfHitGround(collision);
     }
 
     private void FixedUpdate()
@@ -177,6 +180,45 @@ public class HoverVehicleController : MonoBehaviour
     //--------------------
 
     //--------------------
+    #region Velocity Tracking
+
+    private IEnumerator TrackPreviousVelocity()
+    {
+        while (true)
+        {
+            _previousVel = _rb.velocity;
+            yield return new WaitForSeconds(_timeBetweenVelocityTracking);
+        }
+    }
+
+    private void ApplyPreviousVelocityIfHitGround(Collision collision)
+    {
+        if (IsCollisionWithGround(collision) && _rb.velocity.sqrMagnitude < _previousVel.sqrMagnitude)
+        {
+            ApplyPreviousVelocity();
+        }
+    }
+
+    private void ApplyPreviousVelocity()
+    {
+        _rb.velocity = new Vector3(_previousVel.x, _rb.velocity.y, _previousVel.z);
+    }
+
+    private bool IsCollisionWithGround(Collision collision)
+    {
+        Vector3 hitNormal = collision.GetContact(0).normal;
+        if (Vector3.Angle(hitNormal, transform.up) <= _maxGroundAngle)
+        {
+           return true;
+        }
+
+        return false;
+    }
+
+    #endregion
+    //--------------------
+
+    //--------------------
     #region Movement Methods
 
     private void AccelerateTo(Vector3 targetVelocity, float maxAccel)
@@ -188,15 +230,6 @@ public class HoverVehicleController : MonoBehaviour
             accel = accel.normalized * maxAccel;
 
         _rb.AddForceAtPosition(accel, ApplyMovementForceAt, ForceMode.Acceleration);
-    }
-
-    private IEnumerator TrackPreviousVelocity()
-    {
-        while (true)
-        {
-            _previousVel = _rb.velocity;
-            yield return new WaitForSeconds(0.1f);
-        }
     }
 
     #endregion
