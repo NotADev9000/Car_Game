@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent (typeof (Rigidbody))]
 public class HoverVehicleController : MonoBehaviour
 {
+    [Header("Input Settings")]
     [SerializeField] private InputReader _inputReader;
     private Vector2 _inputVector;
 
@@ -29,14 +30,17 @@ public class HoverVehicleController : MonoBehaviour
     [Header("Traction Settings")]
     [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _gripFactor = 0.5f;
 
+    // Components
     private Rigidbody _rb;
-    private Vector3 _previousVel;
 
+    // Suspension Vars
     private List<Vector3> _suspensionContactNormals = new List<Vector3>();
-    private Vector3 _projectedDirection = Vector3.zero;
-
-    private Vector3 ApplyMovementForceAt => transform.position + _rb.centerOfMass + _applyForceOffset;
     private bool IsGrounded => _suspensionContactNormals.Count > 1;
+
+    // Movement Vars
+    private Vector3 _previousVel;
+    private Vector3 _projectedDirection = Vector3.zero;
+    private Vector3 ApplyMovementForceAt => transform.position + _rb.centerOfMass + _applyForceOffset;
 
     private void Awake()
     {
