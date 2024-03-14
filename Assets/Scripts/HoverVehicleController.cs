@@ -193,7 +193,7 @@ public class HoverVehicleController : MonoBehaviour
 
     private void ApplyPreviousVelocityIfHitGround(Collision collision)
     {
-        if (IsCollisionWithGround(collision) && _rb.velocity.sqrMagnitude < _previousVel.sqrMagnitude)
+        if (IsCollisionWithGround(collision) && IsPreviousVelocityFasterThanCurrent())
         {
             ApplyPreviousVelocity();
         }
@@ -202,6 +202,11 @@ public class HoverVehicleController : MonoBehaviour
     private void ApplyPreviousVelocity()
     {
         _rb.velocity = new Vector3(_previousVel.x, _rb.velocity.y, _previousVel.z);
+    }
+
+    private bool IsPreviousVelocityFasterThanCurrent()
+    {
+        return _rb.velocity.sqrMagnitude < _previousVel.sqrMagnitude;
     }
 
     private bool IsCollisionWithGround(Collision collision)
