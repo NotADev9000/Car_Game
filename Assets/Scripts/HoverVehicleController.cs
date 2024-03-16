@@ -25,6 +25,7 @@ public class HoverVehicleController : MonoBehaviour
     [SerializeField][Tooltip("Distance from center of mass to apply movement force")] private Vector3 _applyForceOffset = Vector3.zero;
     [Space(5)]
     [SerializeField] private float _dragOnGround = 0.5f;
+    [SerializeField] private float _dragWhenMoving = 0f;
     [SerializeField] private float _dragInAir = 0f;
     [Space(5)]
     [SerializeField] private float _timeBetweenVelocityTracking = 0.1f;
@@ -45,6 +46,7 @@ public class HoverVehicleController : MonoBehaviour
     private Vector3 _previousVel;
     private Vector3 _projectedDirection = Vector3.zero;
     private Vector3 ApplyMovementForceAt => transform.position + _rb.centerOfMass + _applyForceOffset;
+    private bool IsApplyingMovementInput => _inputVector.y != 0;
 
     private void Awake()
     {
@@ -124,7 +126,17 @@ public class HoverVehicleController : MonoBehaviour
 
     private void UpdateDrag()
     {
-        _rb.drag = IsGrounded ? _dragOnGround : _dragInAir;
+        float drag;
+        if (!IsGrounded)
+        {
+            drag = _dragInAir;
+        }
+        else
+        {
+            drag = IsApplyingMovementInput ? _dragWhenMoving : _dragOnGround;
+        }
+
+        _rb.drag = drag;
     }
 
     /// <summary>
@@ -169,7 +181,7 @@ public class HoverVehicleController : MonoBehaviour
 
     private void UpdateMovement()
     {
-        if (_inputVector.y != 0)
+        if (IsApplyingMovementInput)
         {
             Vector3 force = _inputVector.y * _maxSpeed * _projectedDirection;
             AccelerateTo(force, _acceleration);
