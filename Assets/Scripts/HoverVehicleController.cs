@@ -21,7 +21,6 @@ public class HoverVehicleController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float _maxSpeed = 25f; // m/s
     [SerializeField] private float _acceleration = 15f;  // m/s^2
-    [SerializeField] private float _rotationSpeed = 60f; // deg/s
     [SerializeField][Tooltip("Distance from center of mass to apply movement force")] private Vector3 _applyForceOffset = Vector3.zero;
     [Space(5)]
     [SerializeField] private float _dragOnGround = 0.5f;
@@ -31,6 +30,10 @@ public class HoverVehicleController : MonoBehaviour
     [SerializeField] private float _timeBetweenVelocityTracking = 0.1f;
     [SerializeField] private float _maxGroundAngle = 70f;
 
+    [Header("Steering Settings")]
+    [SerializeField] private float _maxRotationSpeed = 60f;
+    [SerializeField][Tooltip("speed needed before max rotation is applied")] private float _minSpeedForMaxTorque = 5f;
+    [SerializeField][Tooltip("% of max torque (y) to apply when velocity (x) is lower than a threshold")] private AnimationCurve _torqueFactorCurve;
 
     [Header("Traction Settings")]
     [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _gripFactor = 0.5f;
@@ -47,6 +50,7 @@ public class HoverVehicleController : MonoBehaviour
     private Vector3 _projectedDirection = Vector3.zero;
     private Vector3 ApplyMovementForceAt => transform.position + _rb.centerOfMass + _applyForceOffset;
     private bool IsApplyingMovementInput => _inputVector.y != 0;
+    private bool IsApplyingSteeringInput => _inputVector.x != 0;
 
     private void Awake()
     {
@@ -172,10 +176,18 @@ public class HoverVehicleController : MonoBehaviour
 
     private void UpdateSteering()
     {
-        if (_rb.velocity.magnitude > 0.1f)
+        if (IsApplyingSteeringInput)
         {
-            Vector3 steerForce = _inputVector.x * _rotationSpeed * transform.up;
-            _rb.AddTorque(steerForce, ForceMode.Acceleration);
+            float speedToTorqueRatio = _rb.velocity.magnitude / _minSpeedForMaxTorque;
+            float torquePercentageToApply = _torqueFactorCurve.Evaluate(speedToTorqueRatio);
+            float torqueSpeed = _maxRotationSpeed * torquePercentageToApply;
+
+            if (torqueSpeed > 0.01f)
+            {
+                Vector3 steerForce = _inputVector.x * torqueSpeed * transform.up;
+
+                _rb.AddTorque(steerForce, ForceMode.Acceleration);
+            }
         }
     }
 

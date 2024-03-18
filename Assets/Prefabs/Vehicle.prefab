@@ -315,12 +315,42 @@ MonoBehaviour:
   - _transform: {fileID: 6058806577215097728}
   _suspensionRestLength: 0.6
   _springStrength: 30
-  _suspensionDamper: 2
+  _springDamper: 2
   _maxSpeed: 15
   _acceleration: 15
-  _rotationSpeed: 10
-  _gripFactor: 0.5
   _applyForceOffset: {x: 0, y: 0.25, z: 0}
+  _dragOnGround: 0.5
+  _dragWhenMoving: 0
+  _dragInAir: 0
+  _timeBetweenVelocityTracking: 0.1
+  _maxGroundAngle: 70
+  _maxRotationSpeed: 10
+  _minSpeedForMaxTorque: 5
+  _torqueFactorCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.025
+      value: 0
+      inSlope: 0.3439096
+      outSlope: 0.3439096
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.07737095
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _gripFactor: 0.5
 --- !u!1 &8872043083781698350
 GameObject:
   m_ObjectHideFlags: 0

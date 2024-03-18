@@ -25385,6 +25385,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
+      propertyPath: _maxRotationSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
       propertyPath: _suspensionTransforms.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -25408,6 +25413,51 @@ PrefabInstance:
       propertyPath: _suspensionTransforms.Array.data[3]
       value: 
       objectReference: {fileID: 133771332}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].time
+      value: 0.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].inSlope
+      value: 0.3439096
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].outSlope
+      value: 0.3439096
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].outWeight
+      value: 0.07737095
+      objectReference: {fileID: 0}
     - target: {fileID: 8407190019638741334, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: m_Name
