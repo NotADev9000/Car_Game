@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,26 +32,44 @@ public class HoverVehicleController : MonoBehaviour
     [SerializeField] private float _maxGroundAngle = 70f;
 
     [Header("Steering Settings")]
-    [SerializeField] private float _maxRotationSpeed = 60f;
+    [SerializeField] private float _normalMaxRotationSpeed = 7f;
+    [SerializeField] private float _driftMaxRotationSpeed = 8f;
     [SerializeField][Tooltip("speed needed before max rotation is applied")] private float _minSpeedForMaxTorque = 5f;
+    [SerializeField][Tooltip("speed needed before any rotation is applied")] private float _minSpeedForAnyTorque = 0.1f;
     [SerializeField][Tooltip("% of max torque (y) to apply when velocity (x) is lower than a threshold")] private AnimationCurve _torqueFactorCurve;
 
     [Header("Traction Settings")]
-    [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _gripFactor = 0.5f;
+    [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _normalGripFactor = 0.5f;
+    [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _driftGripFactor = 0.1f;
+    [SerializeField] private float _gripLerpToDriftTime = 0.2f;
+    [SerializeField] private float _gripLerpFromDriftTime = 1f;
 
     // Components
     private Rigidbody _rb;
 
-    // Suspension Vars
+    // Input
+    private bool IsApplyingMovementInput => _inputVector.y != 0;
+    private bool IsApplyingSteeringInput => _inputVector.x != 0;
+
+    // Suspension
     private List<Vector3> _suspensionContactNormals = new List<Vector3>();
     private bool IsGrounded => _suspensionContactNormals.Count > 1;
 
-    // Movement Vars
+    // Movement
     private Vector3 _previousVel;
     private Vector3 _projectedDirection = Vector3.zero;
     private Vector3 ApplyMovementForceAt => transform.position + _rb.centerOfMass + _applyForceOffset;
-    private bool IsApplyingMovementInput => _inputVector.y != 0;
-    private bool IsApplyingSteeringInput => _inputVector.x != 0;
+
+    // Steering
+    private float _currentMaxRotationSpeed;
+
+    // Traction
+    private float _currentGripFactor;
+    private float _targetGripFactor;
+    private float _lerpStartGripFactor;
+    private float _gripLerpTotalTime;
+    private float _gripLerpTimer = 0f;
+
 
     private void Awake()
     {
@@ -59,22 +78,30 @@ public class HoverVehicleController : MonoBehaviour
 
     private void Start()
     {
+        UpdateDriftValues(false);
         StartCoroutine(TrackPreviousVelocity());
     }
 
     private void OnEnable()
     {
         _inputReader.MoveEvent += OnMove;
+        _inputReader.FireEvent += OnDriftCheck;
     }
 
     private void OnDisable()
     {
         _inputReader.MoveEvent -= OnMove;
+        _inputReader.FireEvent -= OnDriftCheck;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         ApplyPreviousVelocityIfHitGround(collision);
+    }
+
+    private void Update()
+    {
+        UpdateGripFactor();
     }
 
     private void FixedUpdate()
@@ -88,8 +115,6 @@ public class HoverVehicleController : MonoBehaviour
             UpdateTraction();
             UpdateSteering();
             UpdateMovement();
-
-            SpeedTest();
         }
     }
 
@@ -99,6 +124,11 @@ public class HoverVehicleController : MonoBehaviour
     private void OnMove(Vector2 moveVector)
     {
         _inputVector = moveVector;
+    }
+
+    private void OnDriftCheck(bool isPressed)
+    {
+        UpdateDriftValues(isPressed);
     }
 
     #endregion
@@ -162,13 +192,28 @@ public class HoverVehicleController : MonoBehaviour
         _projectedDirection = Vector3.ProjectOnPlane(transform.forward, suspensionContactAverage);
     }
 
+    private void UpdateGripFactor()
+    {
+        if (_currentGripFactor != _targetGripFactor)
+        {
+            //Debug.Log("Lerping Grip!: " + _gripLerpTimer + " / " + _gripLerpTotalTime);
+            //Debug.Log("GFactor: " + _currentGripFactor);
+            _currentGripFactor = Mathf.Lerp(_lerpStartGripFactor, _targetGripFactor, _gripLerpTimer / _gripLerpTotalTime);
+            _gripLerpTimer += Time.deltaTime;
+        }
+        else
+        {
+            _gripLerpTimer = 0f;
+        }
+    }
+
     /// <summary>
     /// Applies a sideways force to prevent the vehicle from sliding
     /// </summary>
     private void UpdateTraction()
     {
         float sidewaysVelocity = Vector3.Dot(transform.right, _rb.velocity);
-        float desiredSidewaysVelocity = -sidewaysVelocity * _gripFactor;
+        float desiredSidewaysVelocity = -sidewaysVelocity * _currentGripFactor;
         Vector3 tractionForce = transform.right * (desiredSidewaysVelocity / Time.fixedDeltaTime);
 
         _rb.AddForce(tractionForce, ForceMode.Acceleration);
@@ -176,18 +221,14 @@ public class HoverVehicleController : MonoBehaviour
 
     private void UpdateSteering()
     {
-        if (IsApplyingSteeringInput)
+        if (IsApplyingSteeringInput && _rb.velocity.magnitude >= _minSpeedForAnyTorque)
         {
             float speedToTorqueRatio = _rb.velocity.magnitude / _minSpeedForMaxTorque;
             float torquePercentageToApply = _torqueFactorCurve.Evaluate(speedToTorqueRatio);
-            float torqueSpeed = _maxRotationSpeed * torquePercentageToApply;
+            float torqueSpeed = _currentMaxRotationSpeed * torquePercentageToApply;
+            Vector3 steerForce = _inputVector.x * torqueSpeed * transform.up;
 
-            if (torqueSpeed > 0.01f)
-            {
-                Vector3 steerForce = _inputVector.x * torqueSpeed * transform.up;
-
-                _rb.AddTorque(steerForce, ForceMode.Acceleration);
-            }
+            _rb.AddTorque(steerForce, ForceMode.Acceleration);
         }
     }
 
@@ -198,6 +239,16 @@ public class HoverVehicleController : MonoBehaviour
             Vector3 force = _inputVector.y * _maxSpeed * _projectedDirection;
             AccelerateTo(force, _acceleration);
         }
+    }
+
+    private void UpdateDriftValues(bool isDrifting)
+    {
+        _currentMaxRotationSpeed = isDrifting ? _driftMaxRotationSpeed : _normalMaxRotationSpeed;
+
+        _targetGripFactor = isDrifting ? _driftGripFactor : _normalGripFactor;
+        _lerpStartGripFactor = _currentGripFactor;
+        _gripLerpTotalTime = isDrifting ? _gripLerpToDriftTime : _gripLerpFromDriftTime;
+        _gripLerpTimer = 0f;
     }
 
     #endregion
@@ -281,26 +332,6 @@ public class HoverVehicleController : MonoBehaviour
         if (_rb)
         {
             Handles.Label(transform.position, Math.Round(_rb.velocity.magnitude, 2).ToString());
-        }
-    }
-
-    // DEBUG
-    bool _timerOn = false;
-    float _timer = 0f;
-    private void SpeedTest()
-    {
-        if (_timerOn)
-        {
-            float t = Time.time;
-            if (t - _timer >= 1f)
-            {
-                Debug.Log(_rb.velocity.magnitude);
-                _timerOn = false;
-            }
-        }
-        else
-        {
-            _timer = Time.time;
         }
     }
 #endif

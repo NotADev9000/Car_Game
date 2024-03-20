@@ -25374,6 +25374,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 5f7ca13b76c0f7d41b5d66d82c6e423b, type: 2}
     - target: {fileID: 6323887840704301156, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6323887840704301156, guid: b83f596c28fdf614d887fe51169c2f54,
+        type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: f4adcc40a1a061f46b388bfe700195c0,
@@ -25385,8 +25390,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
-      propertyPath: _maxRotationSpeed
-      value: 10
+      propertyPath: _gripLerpTotalTime
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
@@ -25415,48 +25420,33 @@ PrefabInstance:
       objectReference: {fileID: 133771332}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
-      propertyPath: _torqueFactorCurve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
-        type: 3}
       propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].time
-      value: 0.025
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].time
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
-      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].value
-      value: 1
+      propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].value
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].inSlope
-      value: 0.3439096
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
-        type: 3}
-      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].inSlope
-      value: 2
+      value: 0.15527716
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].outSlope
-      value: 0.3439096
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
-        type: 3}
-      propertyPath: _torqueFactorCurve.m_Curve.Array.data[1].outSlope
-      value: 2
+      value: 0.15527716
       objectReference: {fileID: 0}
     - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: _torqueFactorCurve.m_Curve.Array.data[0].outWeight
-      value: 0.07737095
+      value: 0.09981284
       objectReference: {fileID: 0}
     - target: {fileID: 8407190019638741334, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}

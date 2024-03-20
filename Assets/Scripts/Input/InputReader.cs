@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static GameInput;
 
@@ -37,7 +36,7 @@ public class InputReader : ScriptableObject, IPlayerActions
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        FireEvent?.Invoke(context.phase == InputActionPhase.Started);
+        FireEvent?.Invoke(context.phase == InputActionPhase.Started || context.phase == InputActionPhase.Performed);
     }
 
 }
