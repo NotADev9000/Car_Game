@@ -35,15 +35,18 @@ public class HoverVehicleController : MonoBehaviour
     [Header("Steering Settings")]
     [SerializeField] private float _normalMaxRotationSpeed = 7f;
     [SerializeField] private float _driftMaxRotationSpeed = 8f;
+    [SerializeField] private float _inAirRotationSpeed = 1f;
+    [Space(5)]
     [SerializeField][Tooltip("speed needed before max rotation is applied")] private float _minSpeedForMaxTorque = 5f;
     [SerializeField][Tooltip("speed needed before any rotation is applied")] private float _minSpeedForAnyTorque = 0.1f;
+    [Space(5)]
     [SerializeField][Tooltip("% of max torque (y) to apply when velocity (x) is lower than a threshold")] private AnimationCurve _torqueFactorCurve;
 
     [Header("Traction Settings")]
     [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _normalGripFactor = 0.5f;
     [SerializeField][Range(0, 1)][Tooltip("0 = no grip, 1 = max grip")] private float _driftGripFactor = 0.1f;
-    [SerializeField] private float _gripLerpToDriftTime = 0.2f;
-    [SerializeField] private float _gripLerpFromDriftTime = 1f;
+    [SerializeField][Tooltip("length of lerp from normal grip to drifting grip")] private float _gripLerpToDriftTime = 0.2f;
+    [SerializeField][Tooltip("length of lerp from drift grip to normal grip")] private float _gripLerpFromDriftTime = 1f;
 
     // Components
     private Rigidbody _rb;
@@ -109,12 +112,12 @@ public class HoverVehicleController : MonoBehaviour
     {
         UpdateSuspension();
         UpdateDrag();
+        UpdateSteering();
 
         if (IsGrounded)
         {
             UpdateProjectedDirection();
             UpdateTraction();
-            UpdateSteering();
             UpdateMovement();
         }
     }
@@ -237,11 +240,19 @@ public class HoverVehicleController : MonoBehaviour
     {
         if (IsApplyingSteeringInput && _rb.velocity.magnitude >= _minSpeedForAnyTorque)
         {
-            float speedToTorqueRatio = _rb.velocity.magnitude / _minSpeedForMaxTorque;
-            float torquePercentageToApply = _torqueFactorCurve.Evaluate(speedToTorqueRatio);
-            float torqueSpeed = _currentMaxRotationSpeed * torquePercentageToApply;
-            Vector3 steerForce = _inputVector.x * torqueSpeed * transform.up;
+            float torqueSpeed;
+            if (IsGrounded)
+            {
+                float speedToTorqueRatio = _rb.velocity.magnitude / _minSpeedForMaxTorque;
+                float torquePercentageToApply = _torqueFactorCurve.Evaluate(speedToTorqueRatio);
+                torqueSpeed = _currentMaxRotationSpeed * torquePercentageToApply;
+            }
+            else
+            {
+                torqueSpeed = _inAirRotationSpeed;
+            }
 
+            Vector3 steerForce = _inputVector.x * torqueSpeed * transform.up;
             _rb.AddTorque(steerForce, ForceMode.Acceleration);
         }
     }

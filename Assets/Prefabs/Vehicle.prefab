@@ -327,20 +327,21 @@ MonoBehaviour:
   _normalMaxRotationSpeed: 7
   _driftMaxRotationSpeed: 8
   _minSpeedForMaxTorque: 5
+  _minSpeedForAnyTorque: 0.1
   _torqueFactorCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.025
-      value: 0
-      inSlope: 0.3439096
-      outSlope: 0.3439096
+      time: 0
+      value: 0.1
+      inSlope: 0.15527716
+      outSlope: 0.15527716
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.07737095
+      outWeight: 0.09981284
     - serializedVersion: 3
-      time: 1
+      time: 0.7
       value: 1
       inSlope: 2
       outSlope: 2
@@ -353,7 +354,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   _normalGripFactor: 0.5
   _driftGripFactor: 0
-  _gripLerpTotalTime: 0.2
+  _gripLerpToDriftTime: 0.2
+  _gripLerpFromDriftTime: 1
 --- !u!1 &8872043083781698350
 GameObject:
   m_ObjectHideFlags: 0
