@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [SelectionBase]
 [RequireComponent (typeof (Rigidbody))]
@@ -66,7 +67,7 @@ public class HoverVehicleController : MonoBehaviour
     // Traction
     private float _currentGripFactor;
     private float _targetGripFactor;
-    private float _lerpStartGripFactor;
+    private float _lerpStartGripFactor = 0f;
     private float _gripLerpTotalTime;
     private float _gripLerpTimer = 0f;
 
@@ -78,7 +79,7 @@ public class HoverVehicleController : MonoBehaviour
 
     private void Start()
     {
-        UpdateDriftValues(false);
+        InitSettings();
         StartCoroutine(TrackPreviousVelocity());
     }
 
@@ -129,6 +130,19 @@ public class HoverVehicleController : MonoBehaviour
     private void OnDriftCheck(bool isPressed)
     {
         UpdateDriftValues(isPressed);
+    }
+
+    #endregion
+    //--------------------
+
+    //--------------------
+    #region Initialize Settings
+
+    private void InitSettings()
+    {
+        _currentMaxRotationSpeed = _normalMaxRotationSpeed;
+        _currentGripFactor = _targetGripFactor = _normalGripFactor;
+        _gripLerpTotalTime = _gripLerpToDriftTime;
     }
 
     #endregion
