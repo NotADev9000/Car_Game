@@ -20,6 +20,10 @@ public class HoverVehicleController : MonoBehaviour
     [SerializeField] private float _springStrength = 15f;
     [SerializeField] private float _springDamper = 2f;
 
+    // TODO: Separate visuals from controller class
+    [Header("Visual Suspension Settings")]
+    [SerializeField] private Transform[] _visualWheels;
+
     [Header("Movement Settings")]
     [SerializeField] private float _maxSpeed = 25f; // m/s
     [SerializeField] private float _acceleration = 15f;  // m/s^2
@@ -106,6 +110,8 @@ public class HoverVehicleController : MonoBehaviour
     private void Update()
     {
         UpdateGripFactor();
+
+        UpdateWheelVisuals();
     }
 
     private void FixedUpdate()
@@ -339,6 +345,21 @@ public class HoverVehicleController : MonoBehaviour
 
     #endregion
     //--------------------
+
+    private void UpdateWheelVisuals()
+    {
+        for (int i = 0; i < _suspensions.Length; i++)
+        {
+            float targetYPos = _suspensions[i].Transform.localPosition.y - _suspensions[i].CurrentLength;
+            float changeYPos = targetYPos - _visualWheels[i].localPosition.y;
+
+            _visualWheels[i].localPosition += new Vector3(0, changeYPos * Time.deltaTime * 100, 0);
+
+            _visualWheels[i].localPosition = new Vector3(_visualWheels[i].localPosition.x,
+                                                     _visualWheels[i].localPosition.y,
+                                                     _visualWheels[i].localPosition.z);
+        }
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
