@@ -23,6 +23,7 @@ public class HoverVehicleController : MonoBehaviour
     // TODO: Separate visuals from controller class
     [Header("Visual Suspension Settings")]
     [SerializeField] private Transform[] _visualWheels;
+    [SerializeField] private float _snapWheelsToRaySpeed = 10f;
 
     [Header("Movement Settings")]
     [SerializeField] private float _maxSpeed = 25f; // m/s
@@ -353,7 +354,7 @@ public class HoverVehicleController : MonoBehaviour
             float targetYPos = _suspensions[i].Transform.localPosition.y - _suspensions[i].CurrentLength;
             float changeYPos = targetYPos - _visualWheels[i].localPosition.y;
 
-            _visualWheels[i].localPosition += new Vector3(0, changeYPos * Time.deltaTime * 100, 0);
+            _visualWheels[i].localPosition += new Vector3(0, changeYPos * Time.deltaTime * _snapWheelsToRaySpeed, 0);
 
             _visualWheels[i].localPosition = new Vector3(_visualWheels[i].localPosition.x,
                                                      _visualWheels[i].localPosition.y,

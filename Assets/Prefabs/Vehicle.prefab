@@ -899,16 +899,17 @@ MonoBehaviour:
   - _transform: {fileID: 2134681090111789196}
   - _transform: {fileID: 6058806577215097728}
   _suspensionRestLength: 0.6
-  _springStrength: 30
+  _springStrength: 50
   _springDamper: 2
   _visualWheels:
   - {fileID: 4113683445020115974}
   - {fileID: 5971076387810094404}
   - {fileID: 3817525722819378562}
   - {fileID: 7596856216476209561}
+  _snapWheelsToRaySpeed: 10
   _maxSpeed: 15
   _acceleration: 15
-  _applyForceOffset: {x: 0, y: 0.25, z: 0}
+  _applyForceOffset: {x: 0, y: 0.1, z: 0}
   _dragOnGround: 0.5
   _dragWhenMoving: 0
   _dragInAir: 0
