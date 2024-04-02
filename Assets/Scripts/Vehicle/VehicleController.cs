@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 [SelectionBase]
 [RequireComponent (typeof (Rigidbody))]
-public class HoverVehicleController : MonoBehaviour
+public class VehicleController : MonoBehaviour
 {
     [Header("Input Settings")]
     [SerializeField] private InputReader _inputReader;

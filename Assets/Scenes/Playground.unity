@@ -25398,16 +25398,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.9
       objectReference: {fileID: 0}
-    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
-        type: 3}
-      propertyPath: _springStrength
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 6986855377560448118, guid: b83f596c28fdf614d887fe51169c2f54,
-        type: 3}
-      propertyPath: _suspensionRestLength
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 8027874887366125775, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: m_LocalPosition.y
