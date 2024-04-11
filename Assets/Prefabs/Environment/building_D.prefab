@@ -79,6 +79,16 @@ PrefabInstance:
       propertyPath: m_Size.x
       value: 1.600473
       objectReference: {fileID: 0}
+    - target: {fileID: 7281440983444146673, guid: 6504098db8934ef44bcaecd0b8bac82b,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 2.2486298
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281440983444146673, guid: 6504098db8934ef44bcaecd0b8bac82b,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.2242454
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

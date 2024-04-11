@@ -915,7 +915,7 @@ MonoBehaviour:
   _dragInAir: 0
   _timeBetweenVelocityTracking: 0.1
   _maxGroundAngle: 70
-  _normalMaxRotationSpeed: 7
+  _normalMaxRotationSpeed: 6
   _driftMaxRotationSpeed: 8
   _inAirRotationSpeed: 3
   _minSpeedForMaxTorque: 5
@@ -945,7 +945,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _normalGripFactor: 0.5
-  _driftGripFactor: 0
+  _driftGripFactor: 0.02
   _gripLerpToDriftTime: 0.2
   _gripLerpFromDriftTime: 1
 --- !u!1 &8872043083781698350
