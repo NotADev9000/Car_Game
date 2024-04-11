@@ -9,7 +9,7 @@ public class Rotate : MonoBehaviour
 
     private void Update()
     {
-        int turnClockwise = _rotateClockwise ? 1 : -1;
-        transform.Rotate(0, _rotationSpeed * Time.deltaTime * turnClockwise, 0);
+        int turnDirection = _rotateClockwise ? 1 : -1;
+        transform.Rotate(0, _rotationSpeed * Time.deltaTime * turnDirection, 0);
     }
 }
