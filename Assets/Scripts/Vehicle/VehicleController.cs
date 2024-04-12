@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [SelectionBase]
 [RequireComponent (typeof (Rigidbody))]
@@ -342,6 +340,18 @@ public class VehicleController : MonoBehaviour
             accel = accel.normalized * maxAccel;
 
         _rb.AddForceAtPosition(accel, ApplyMovementForceAt, ForceMode.Acceleration);
+    }
+
+    #endregion
+    //--------------------
+
+    //--------------------
+    #region Public Methods
+
+    public void ResetAllMovement()
+    {
+        _rb.velocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
     }
 
     #endregion
