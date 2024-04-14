@@ -9,7 +9,7 @@ using UnityEngine;
 public class VehicleController : MonoBehaviour
 {
     [Header("Input Settings")]
-    [SerializeField] private InputReader _inputReader;
+    [SerializeField] private InputReader_Player _inputReader;
     private Vector2 _inputVector;
 
     [Header("Suspension Settings")]

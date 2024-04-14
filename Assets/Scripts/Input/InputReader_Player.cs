@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static GameInput;
 
-[CreateAssetMenu(menuName = "InputReader")]
-public class InputReader : ScriptableObject, IPlayerActions
+[CreateAssetMenu(menuName = "InputReader_Player")]
+public class InputReader_Player : ScriptableObject, IPlayerActions
 {
     public event Action<Vector2> MoveEvent;
     public event Action<bool> FireEvent;
@@ -27,11 +27,6 @@ public class InputReader : ScriptableObject, IPlayerActions
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveEvent?.Invoke(context.ReadValue<Vector2>());
-    }
-
-    public void OnLook(InputAction.CallbackContext context)
-    {
-        // noop
     }
 
     public void OnFire(InputAction.CallbackContext context)
