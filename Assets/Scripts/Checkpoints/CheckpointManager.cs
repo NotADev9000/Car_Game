@@ -24,13 +24,13 @@ public class CheckpointManager : MonoBehaviour
         ResetCurrentCheckpoint();
     }
 
-    private void OnCheckpointTriggered(Vector3 newRespawnPosition)
-    {
-        CurrentCheckpoint = newRespawnPosition;
-    }
-
     private void ResetCurrentCheckpoint()
     {
         CurrentCheckpoint = _defaultCheckpoint;
+    }
+
+    private void OnCheckpointTriggered(Vector3 newRespawnPosition)
+    {
+        CurrentCheckpoint = newRespawnPosition;
     }
 }

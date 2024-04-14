@@ -15,9 +15,11 @@ public class Checkpoint : MonoBehaviour
         OnCheckpointTriggered?.Invoke(_respawnPosition);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(_respawnPosition, 1f);
     }
+#endif
 }

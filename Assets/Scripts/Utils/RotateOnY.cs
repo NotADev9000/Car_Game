@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rotate : MonoBehaviour
+public class RotateOnY : MonoBehaviour
 {
     [SerializeField] private float _rotationSpeed = 0f;
     [SerializeField] private bool _rotateClockwise = true;
