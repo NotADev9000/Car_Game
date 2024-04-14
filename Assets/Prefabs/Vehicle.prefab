@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6679451470767273578}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FL Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3817525722819378562}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_BR_Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8429510831303423303}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FR Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2134681090111789196}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BR Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 6778748655451183774}
   - component: {fileID: 8283471121228510189}
   - component: {fileID: 5796553277991149700}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Visuals_Debug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 6649646370606504718}
   - component: {fileID: 4492929813984155612}
   - component: {fileID: 4995903509248113558}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_backRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 2423893846354240270}
   - component: {fileID: 1961396961175546012}
   - component: {fileID: 7649758875044068334}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_frontLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5971076387810094404}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_FL_Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,7 +417,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4113683445020115974}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_FR_Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 4716231503587845680}
   - component: {fileID: 5591124315430958197}
   - component: {fileID: 6224490857771271170}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_frontRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -533,7 +533,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5064882413815949851}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -571,7 +571,7 @@ GameObject:
   - component: {fileID: 3475176261792672134}
   - component: {fileID: 657793457494420789}
   - component: {fileID: 2072600108433873949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spoiler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -655,7 +655,7 @@ GameObject:
   - component: {fileID: 2015568837505747176}
   - component: {fileID: 5382212344236058515}
   - component: {fileID: 1478669751600556380}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_backLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -737,7 +737,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7596856216476209561}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_BL_Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -769,7 +769,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5236215042439630437}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WheelParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -807,7 +807,7 @@ GameObject:
   - component: {fileID: 6323887840704301156}
   - component: {fileID: 486718412531398434}
   - component: {fileID: 6986855377560448118}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Vehicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -830,7 +830,7 @@ Transform:
   - {fileID: 5064882413815949851}
   - {fileID: 6778748655451183774}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6323887840704301156
 BoxCollider:
@@ -910,7 +910,7 @@ MonoBehaviour:
   _maxSpeed: 15
   _acceleration: 15
   _applyForceOffset: {x: 0, y: 0.1, z: 0}
-  _dragOnGround: 0.5
+  _dragOnGround: 1
   _dragWhenMoving: 0
   _dragInAir: 0
   _timeBetweenVelocityTracking: 0.1
@@ -957,7 +957,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6058806577215097728}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BL Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -990,7 +990,7 @@ GameObject:
   - component: {fileID: 8027874887366125775}
   - component: {fileID: 8791826360944373782}
   - component: {fileID: 3784361201284544332}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

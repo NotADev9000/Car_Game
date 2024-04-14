@@ -6,10 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class VoidContact : MonoBehaviour
 {
-    public static event Action<Collider> OnVoidTriggered;
+    public static event Action OnVoidTriggered;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter()
     {
-        OnVoidTriggered?.Invoke(other);
+        OnVoidTriggered?.Invoke();
     }
 }

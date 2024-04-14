@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private VehicleController Player;
+    [SerializeField] private VehicleController _player;
+    public VehicleController Player { get => _player; }
 
     private void OnEnable()
     {
@@ -17,19 +18,20 @@ public class PlayerManager : MonoBehaviour
         VoidContact.OnVoidTriggered -= OnVoidTriggered;
     }
 
-    private void OnVoidTriggered(Collider obj)
+    private void OnVoidTriggered()
     {
-        if (obj.gameObject == Player.gameObject)
-        {
-            TeleportPlayerToLastCheckpoint();
-        }
+        TeleportPlayerToLastCheckpoint();
     }
 
     private void TeleportPlayerToLastCheckpoint()
     {
-        // TODO: get last checkpoint here
         Player.ResetAllMovement();
+        ResetPlayerTransform();
+    }
+
+    private void ResetPlayerTransform()
+    {
         Player.transform.rotation = Quaternion.identity;
-        Player.transform.position = Vector3.zero + new Vector3(0, 2, 0);
+        Player.transform.position = CheckpointManager.CurrentCheckpoint;
     }
 }
