@@ -24,7 +24,8 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private float _snapWheelsToRaySpeed = 10f;
 
     [Header("Movement Settings")]
-    [SerializeField] private float _maxSpeed = 25f; // m/s
+    [SerializeField] private float _maxSpeedForward = 15f; // m/s
+    [SerializeField] private float _maxSpeedReverse = 10f; // m/s
     [SerializeField] private float _acceleration = 15f;  // m/s^2
     [SerializeField][Tooltip("Distance from center of mass to apply movement force")] private Vector3 _applyForceOffset = Vector3.zero;
     [Space(5)]
@@ -266,7 +267,8 @@ public class VehicleController : MonoBehaviour
     {
         if (IsApplyingMovementInput)
         {
-            Vector3 force = _inputVector.y * _maxSpeed * _projectedDirection;
+            float maxSpeedWithDirection = _inputVector.y * (_inputVector.y > 0f ? _maxSpeedForward : _maxSpeedReverse);
+            Vector3 force = maxSpeedWithDirection * _projectedDirection;
             AccelerateTo(force, _acceleration);
         }
     }
