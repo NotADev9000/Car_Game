@@ -219,8 +219,6 @@ public class VehicleController : MonoBehaviour
     {
         if (_currentGripFactor != _targetGripFactor)
         {
-            //Debug.Log("Lerping Grip!: " + _gripLerpTimer + " / " + _gripLerpTotalTime);
-            //Debug.Log("GFactor: " + _currentGripFactor);
             _currentGripFactor = Mathf.Lerp(_lerpStartGripFactor, _targetGripFactor, _gripLerpTimer / _gripLerpTotalTime);
             _gripLerpTimer += Time.deltaTime;
         }
@@ -244,23 +242,46 @@ public class VehicleController : MonoBehaviour
 
     private void UpdateSteering()
     {
-        if (IsApplyingSteeringInput && _rb.velocity.magnitude >= _minSpeedForAnyTorque)
+        Vector3 steerForce;
+        if (IsGrounded)
         {
-            float torqueSpeed;
-            if (IsGrounded)
-            {
-                float speedToTorqueRatio = _rb.velocity.magnitude / _minSpeedForMaxTorque;
-                float torquePercentageToApply = _torqueFactorCurve.Evaluate(speedToTorqueRatio);
-                torqueSpeed = _currentMaxRotationSpeed * torquePercentageToApply;
-            }
-            else
-            {
-                torqueSpeed = _inAirRotationSpeed;
-            }
+            if (!IsApplyingSteeringInput && _rb.velocity.magnitude < _minSpeedForAnyTorque) return;
 
-            Vector3 steerForce = CalculateSteerDirection() * torqueSpeed * transform.up;
-            _rb.AddTorque(steerForce, ForceMode.Acceleration);
+            steerForce = CalculateSteerForceOnGround();
         }
+        else
+        {
+            steerForce = CalculateSteerForceInAir();
+        }
+
+        _rb.AddTorque(steerForce, ForceMode.Acceleration);
+    }
+
+    private Vector3 CalculateSteerForceOnGround()
+    {
+        float speedToTorqueRatio = _rb.velocity.magnitude / _minSpeedForMaxTorque;
+        float torquePercentageToApply = _torqueFactorCurve.Evaluate(speedToTorqueRatio);
+        float torqueForce = _currentMaxRotationSpeed * torquePercentageToApply;
+
+        float steerDirection = CalculateSteerDirectionOnGround();
+
+        return steerDirection * torqueForce * transform.up;
+    }
+
+    private float CalculateSteerDirectionOnGround()
+    {
+        // direction based on if player is inputting to move forward OR backward
+        if (_inputVector.y != 0) return _inputVector.x * _inputVector.y;
+
+        // if no input: steering based on movement direction of vehicle (forward or backward)
+        int directionDiff = Vector3.Dot(_rb.velocity.normalized, transform.forward) > 0f ? 1 : -1;
+        return _inputVector.x * directionDiff;
+    }
+
+    private Vector3 CalculateSteerForceInAir()
+    {
+        Vector3 rotation = (_inputVector.y * transform.right) + (-_inputVector.x * transform.forward);
+        return rotation * _inAirRotationSpeed;
     }
 
     private void UpdateMovement()
@@ -281,16 +302,6 @@ public class VehicleController : MonoBehaviour
         _lerpStartGripFactor = _currentGripFactor;
         _gripLerpTotalTime = isDrifting ? _gripLerpToDriftTime : _gripLerpFromDriftTime;
         _gripLerpTimer = 0f;
-    }
-
-    private float CalculateSteerDirection()
-    {
-        // direction based on if player is inputting to move forward OR backward
-        if (_inputVector.y != 0) return _inputVector.x * _inputVector.y;
-
-        // if no input: steering based on movement direction of vehicle (forward or backward)
-        int directionDiff = Vector3.Dot(_rb.velocity.normalized, transform.forward) > 0f ? 1 : -1;
-        return _inputVector.x * directionDiff;
     }
 
     #endregion
