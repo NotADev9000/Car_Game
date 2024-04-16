@@ -9,7 +9,8 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private InputReader_UI _inputReader;
 
     [Header("UI Settings")]
-    [SerializeField] private GameObject pauseMenuContainer;
+    [SerializeField] private GameObject _pauseMenuContainer;
+    [SerializeField] [Tooltip("UI Elements that should be hidden in WebGL builds")] private GameObject[] _NonWebGlUIElements;
 
     // Pause State
     private bool _isGamePaused = false;
@@ -30,7 +31,9 @@ public class PauseManager : MonoBehaviour
 
     private void Start()
     {
-        pauseMenuContainer.SetActive(false);
+        // hide pause menu on start
+        _pauseMenuContainer.SetActive(false);
+        HideElementsFromWebGL();
     }
 
     //--------------------
@@ -65,9 +68,20 @@ public class PauseManager : MonoBehaviour
 
     private void TogglePauseUI(bool isGamePaused)
     {
-        if (pauseMenuContainer != null)
+        if (_pauseMenuContainer != null)
         {
-            pauseMenuContainer.SetActive(isGamePaused);
+            _pauseMenuContainer.SetActive(isGamePaused);
+        }
+    }
+
+    private void HideElementsFromWebGL()
+    {
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            for (int i = 0; i < _NonWebGlUIElements.Length; i++)
+            {
+                _NonWebGlUIElements[i].SetActive(false);
+            }
         }
     }
 
@@ -80,6 +94,11 @@ public class PauseManager : MonoBehaviour
     {
         OnRestartPressed?.Invoke();
         ChangePause();
+    }
+
+    public void OnQuitButtonPressedUI()
+    {
+        Application.Quit();
     }
 
     #endregion
