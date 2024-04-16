@@ -10,17 +10,14 @@ public class PlayerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        VoidContact.OnVoidTriggered += OnVoidTriggered;
+        VoidContact.OnVoidTriggered += TeleportPlayerToLastCheckpoint;
+        PauseManager.OnRestartPressed += TeleportPlayerToLastCheckpoint;
     }
 
     private void OnDisable()
     {
-        VoidContact.OnVoidTriggered -= OnVoidTriggered;
-    }
-
-    private void OnVoidTriggered()
-    {
-        TeleportPlayerToLastCheckpoint();
+        VoidContact.OnVoidTriggered -= TeleportPlayerToLastCheckpoint;
+        PauseManager.OnRestartPressed -= TeleportPlayerToLastCheckpoint;
     }
 
     private void TeleportPlayerToLastCheckpoint()
