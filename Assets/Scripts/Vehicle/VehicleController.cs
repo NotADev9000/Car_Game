@@ -257,7 +257,7 @@ public class VehicleController : MonoBehaviour
                 torqueSpeed = _inAirRotationSpeed;
             }
 
-            Vector3 steerForce = _inputVector.x * torqueSpeed * transform.up;
+            Vector3 steerForce = CalculateSteerDirection() * torqueSpeed * transform.up;
             _rb.AddTorque(steerForce, ForceMode.Acceleration);
         }
     }
@@ -279,6 +279,16 @@ public class VehicleController : MonoBehaviour
         _lerpStartGripFactor = _currentGripFactor;
         _gripLerpTotalTime = isDrifting ? _gripLerpToDriftTime : _gripLerpFromDriftTime;
         _gripLerpTimer = 0f;
+    }
+
+    private float CalculateSteerDirection()
+    {
+        // direction based on if player is inputting to move forward OR backward
+        if (_inputVector.y != 0) return _inputVector.x * _inputVector.y;
+
+        // if no input: steering based on movement direction of vehicle (forward or backward)
+        int directionDiff = Vector3.Dot(_rb.velocity.normalized, transform.forward) > 0f ? 1 : -1;
+        return _inputVector.x * directionDiff;
     }
 
     #endregion
