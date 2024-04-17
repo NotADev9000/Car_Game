@@ -11,6 +11,7 @@ public class VehicleController : MonoBehaviour
     [Header("Input Settings")]
     [SerializeField] private InputReader_Player _inputReader;
     private Vector2 _inputVector;
+    public Vector2 InputVector { get => _inputVector; }
 
     [Header("Suspension Settings")]
     [SerializeField] private Suspension[] _suspensions;
