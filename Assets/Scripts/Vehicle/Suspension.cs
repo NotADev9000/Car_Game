@@ -13,7 +13,7 @@ public class Suspension
 
     public void CastSpring(float restLength)
     {
-        if (Physics.Raycast(Transform.position, -Transform.up, out RaycastHit hit, restLength))
+        if (Physics.Raycast(Transform.position, -Transform.up, out RaycastHit hit, restLength, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             IsGrounded = true;
             CurrentLength = hit.distance;
