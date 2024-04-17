@@ -807,6 +807,7 @@ GameObject:
   - component: {fileID: 6323887840704301156}
   - component: {fileID: 486718412531398434}
   - component: {fileID: 6986855377560448118}
+  - component: {fileID: 1424502975704024708}
   m_Layer: 7
   m_Name: Vehicle
   m_TagString: Untagged
@@ -949,6 +950,24 @@ MonoBehaviour:
   _driftGripFactor: 0.02
   _gripLerpToDriftTime: 0.2
   _gripLerpFromDriftTime: 1
+--- !u!114 &1424502975704024708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8407190019638741334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4c10569b414e6469e71a0b1824aa6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualWheels:
+  - {fileID: 4113683445020115974}
+  - {fileID: 5971076387810094404}
+  - {fileID: 3817525722819378562}
+  - {fileID: 7596856216476209561}
+  _snapWheelsToRaySpeed: 10
 --- !u!1 &8872043083781698350
 GameObject:
   m_ObjectHideFlags: 0
