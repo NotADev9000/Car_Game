@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class VoidContact : MonoBehaviour
+public class Void : MonoBehaviour
 {
     public static event Action OnVoidTriggered;
 
