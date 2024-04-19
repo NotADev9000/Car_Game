@@ -370,6 +370,7 @@ public class VehicleController : MonoBehaviour
     {
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
+        transform.rotation = Quaternion.identity;
     }
 
     #endregion

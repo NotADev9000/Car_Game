@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseManager : MonoBehaviour
+public class PauseManager : MenuManager
 {
     [Header("Input Settings")]
     [SerializeField] private InputReader_UI _inputReader;
 
     [Header("UI Settings")]
     [SerializeField] private GameObject _pauseMenuContainer;
-    [SerializeField] [Tooltip("UI Elements that should be hidden in WebGL builds")] private GameObject[] _NonWebGlUIElements;
 
     // Pause State
     private bool _isGamePaused = false;
@@ -21,18 +20,19 @@ public class PauseManager : MonoBehaviour
     private void OnEnable()
     {
         _inputReader.PauseEvent += OnPauseInputPressed;
+        GameManager.OnGameEnded += TurnOffPause;
     }
 
     private void OnDisable()
     {
         _inputReader.PauseEvent -= OnPauseInputPressed;
+        GameManager.OnGameEnded -= TurnOffPause;
     }
-
-    private void Start()
+     
+    protected override void Start()
     {
-        // hide pause menu on start
+        base.Start();
         _pauseMenuContainer.SetActive(false);
-        HideElementsFromWebGL();
     }
 
     //--------------------
@@ -40,23 +40,30 @@ public class PauseManager : MonoBehaviour
 
     private void OnPauseInputPressed(bool startedPress)
     {
-        if (!startedPress) return;
+        if (!GameManager.IsInputAllowed || !startedPress) return;
 
-        ChangePause();
+        TogglePause();
     }
 
-    private void ChangePause()
+    private void TogglePause()
     {
-        TogglePauseState();
-
+        ChangePauseState(!_isGamePaused);
         Time.timeScale = _isGamePaused ? 0f : 1f;
-        TogglePauseUI(_isGamePaused);
+        ChangePauseUI(_isGamePaused);
+        ChangeOverlayUI(_isGamePaused);
     }
 
-    private void TogglePauseState()
+    private void TurnOffPause()
     {
-        _isGamePaused = !_isGamePaused;
+        ChangePauseState(false); 
+        ChangePauseUI(false);
     }
+
+    private void ChangePauseState(bool state)
+    {
+        _isGamePaused = state;
+    }
+
 
     #endregion
     //--------------------
@@ -64,7 +71,7 @@ public class PauseManager : MonoBehaviour
     //--------------------
     #region UI
 
-    private void TogglePauseUI(bool isGamePaused)
+    private void ChangePauseUI(bool isGamePaused)
     {
         if (_pauseMenuContainer != null)
         {
@@ -72,31 +79,15 @@ public class PauseManager : MonoBehaviour
         }
     }
 
-    private void HideElementsFromWebGL()
-    {
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
-        {
-            for (int i = 0; i < _NonWebGlUIElements.Length; i++)
-            {
-                _NonWebGlUIElements[i].SetActive(false);
-            }
-        }
-    }
-
     public void OnResumeButtonPressedUI()
     {
-        ChangePause();
+        TogglePause();
     }
 
     public void OnRestartButtonPressedUI()
     {
         OnRestartPressed?.Invoke();
-        ChangePause();
-    }
-
-    public void OnQuitButtonPressedUI()
-    {
-        Application.Quit();
+        TogglePause();
     }
 
     #endregion

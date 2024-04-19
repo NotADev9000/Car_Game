@@ -10,12 +10,14 @@ public class TimerManager : MonoBehaviour
     {
         GameManager.OnGameStarted += OnGameStart;
         GameManager.OnGameEnded += OnGameEnd;
+        GameManager.OnGameReset += OnGameReset;
     }
 
     private void OnDisable()
     {
         GameManager.OnGameStarted -= OnGameStart;
         GameManager.OnGameEnded -= OnGameEnd;
+        GameManager.OnGameReset -= OnGameReset;
     }
 
     private void OnGameStart()
@@ -26,6 +28,12 @@ public class TimerManager : MonoBehaviour
     private void OnGameEnd()
     {
         _gameTimer.PauseTimer();
+    }
+
+    private void OnGameReset()
+    {
+        _gameTimer.ResetTimer();
+        _introTimer.ResetTimer();
     }
 
     private void StartTimer(Timer timer)

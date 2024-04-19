@@ -10,25 +10,26 @@ public class PlayerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Void.OnVoidTriggered += TeleportPlayerToLastCheckpoint;
-        PauseManager.OnRestartPressed += TeleportPlayerToLastCheckpoint;
+        Void.OnVoidTriggered += RestartAtLastCheckpoint;
+        PauseManager.OnRestartPressed += RestartAtLastCheckpoint;
+        GameManager.OnGameReset += RestartAtLastCheckpoint;
     }
 
     private void OnDisable()
     {
-        Void.OnVoidTriggered -= TeleportPlayerToLastCheckpoint;
-        PauseManager.OnRestartPressed -= TeleportPlayerToLastCheckpoint;
+        Void.OnVoidTriggered -= RestartAtLastCheckpoint;
+        PauseManager.OnRestartPressed -= RestartAtLastCheckpoint;
+        GameManager.OnGameReset -= RestartAtLastCheckpoint;
+    }
+
+    private void RestartAtLastCheckpoint()
+    {
+        Player.ResetAllMovement();
+        TeleportPlayerToLastCheckpoint();
     }
 
     private void TeleportPlayerToLastCheckpoint()
     {
-        Player.ResetAllMovement();
-        ResetPlayerTransform();
-    }
-
-    private void ResetPlayerTransform()
-    {
-        Player.transform.rotation = Quaternion.identity;
         Player.transform.position = CheckpointManager.CurrentCheckpoint;
     }
 }

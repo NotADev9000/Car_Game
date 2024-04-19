@@ -12,11 +12,13 @@ public class CheckpointManager : MonoBehaviour
     private void OnEnable()
     {
         Checkpoint.OnCheckpointTriggered += OnCheckpointTriggered;
+        GameManager.OnGameEnded += ResetCurrentCheckpoint;
     }
 
     private void OnDisable()
     {
         Checkpoint.OnCheckpointTriggered -= OnCheckpointTriggered;
+        GameManager.OnGameEnded -= ResetCurrentCheckpoint;
     }
 
     private void Awake()
