@@ -3,29 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Timer : MonoBehaviour
+public abstract class Timer : MonoBehaviour
 {
-    public float Count { get; private set; }
-    private bool _isRunning;
+    public float Count { get; protected set; }
+    protected bool _isRunning;
 
-    private void Start()
+    private void Awake()
     {
-        ResetTimer();
+        StopTimer();
     }
 
-    private void Update()
-    {
-        if (_isRunning)
-        {
-            Count += Time.deltaTime;
-        }
-    }
+    protected abstract void Update();
 
-    public void ResetTimer()
-    {
-        Count = 0f;
-        _isRunning = false;
-    }
+    public abstract void ResetTimer();
 
     public void StartTimer()
     {
@@ -39,6 +29,7 @@ public class Timer : MonoBehaviour
 
     public void StopTimer()
     {
+        PauseTimer();
         ResetTimer();
     }
 }

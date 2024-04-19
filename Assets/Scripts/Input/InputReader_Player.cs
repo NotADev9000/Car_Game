@@ -15,13 +15,34 @@ public class InputReader_Player : ScriptableObject, IPlayerActions
 
     private void OnEnable()
     {
+        GameManager.OnGameStarted += EnableInput;
+        GameManager.OnGameEnded += DisableInput;
+        SetupInput();
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameStarted -= EnableInput;
+        GameManager.OnGameEnded -= DisableInput;
+    }
+
+    private void SetupInput()
+    {
         if (_playerInput == null)
         {
             _playerInput = new GameInput();
             _playerInput.Player.SetCallbacks(this);
-
-            _playerInput.Player.Enable();
         }
+    }
+
+    private void EnableInput()
+    {
+        _playerInput.Player.Enable();
+    }
+
+    private void DisableInput()
+    {
+        _playerInput.Player.Disable();
     }
 
     public void OnMove(InputAction.CallbackContext context)

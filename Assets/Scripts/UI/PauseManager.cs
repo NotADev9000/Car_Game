@@ -40,7 +40,7 @@ public class PauseManager : MenuManager
 
     private void OnPauseInputPressed(bool startedPress)
     {
-        if (!GameManager.IsInputAllowed || !startedPress) return;
+        if (!startedPress) return;
 
         TogglePause();
     }

@@ -3440,9 +3440,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 62720553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b7fdd89ac0663429e761652bb5c797, type: 3}
+  m_Script: {fileID: 11500000, guid: a8cc9976d66455d40bfef0894b76fde3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startTime: 5
 --- !u!1001 &65120884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5465,7 +5466,7 @@ GameObject:
   - component: {fileID: 106475539}
   - component: {fileID: 106475537}
   m_Layer: 0
-  m_Name: GameTimer
+  m_Name: GameTimer_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9208,7 +9209,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 201931280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b7fdd89ac0663429e761652bb5c797, type: 3}
+  m_Script: {fileID: 11500000, guid: aca69e6bd4df23a4ebf45d54d93b0502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &202378368
@@ -81825,6 +81826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 1506898138}
+  _inputReader: {fileID: 11400000, guid: b7003b5d2579c0a498c60f9dedab5bba, type: 2}
 --- !u!1001 &2124745306
 PrefabInstance:
   m_ObjectHideFlags: 0
