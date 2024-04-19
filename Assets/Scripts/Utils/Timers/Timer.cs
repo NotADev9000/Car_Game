@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    private float _count;
+    public float Count { get; private set; }
     private bool _isRunning;
 
     private void Start()
@@ -17,22 +17,13 @@ public class Timer : MonoBehaviour
     {
         if (_isRunning)
         {
-            _count += Time.deltaTime;
-
-            // Convert timerValue to TimeSpan
-            TimeSpan timeSpan = TimeSpan.FromSeconds(_count);
-
-            // Format the TimeSpan to display in mm:ss:msms format
-            string formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds / 10);
-
-            // Display the formatted time
-            Debug.Log(formattedTime);
+            Count += Time.deltaTime;
         }
     }
 
     public void ResetTimer()
     {
-        _count = 0f;
+        Count = 0f;
         _isRunning = false;
     }
 

@@ -16,7 +16,6 @@ public class PauseManager : MonoBehaviour
     private bool _isGamePaused = false;
 
     // Events
-    public static event Action<bool> OnPauseChange;
     public static event Action OnRestartPressed;
 
     private void OnEnable()
@@ -50,9 +49,8 @@ public class PauseManager : MonoBehaviour
     {
         TogglePauseState();
 
-        OnPauseChange?.Invoke(_isGamePaused);
-        TogglePauseUI(_isGamePaused);
         Time.timeScale = _isGamePaused ? 0f : 1f;
+        TogglePauseUI(_isGamePaused);
     }
 
     private void TogglePauseState()
