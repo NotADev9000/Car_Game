@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static event Action OnGameReset;
 
     // State
-    public static bool IsInputAllowed { get; private set; } = true;
+    public static bool IsInputAllowed { get; private set; } = false;
 
     private void OnEnable()
     {
