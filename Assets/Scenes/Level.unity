@@ -2496,7 +2496,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51403861}
   m_LocalRotation: {x: 0.2840153, y: -0, z: -0, w: 0.95881975}
-  m_LocalPosition: {x: 169, y: -58.196507, z: 905.90393}
+  m_LocalPosition: {x: 168, y: -58.196507, z: 905.90393}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6448,7 +6448,7 @@ PrefabInstance:
     - target: {fileID: 2530363149479654097, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 169
+      value: 168
       objectReference: {fileID: 0}
     - target: {fileID: 2530363149479654097, guid: b83f596c28fdf614d887fe51169c2f54,
         type: 3}
@@ -17915,7 +17915,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Highscore: 00:00:00'
+  m_text: 'Best Time: 00:00:00'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -42387,7 +42387,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Your Score: 00:00:00'
+  m_text: 'Your Time: 00:00:00'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -68930,7 +68930,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735031872}
   m_LocalRotation: {x: 0.2840153, y: 0, z: 0, w: 0.95881975}
-  m_LocalPosition: {x: 169, y: -58.196507, z: 905.90393}
+  m_LocalPosition: {x: 168, y: -58.196507, z: 905.90393}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -73294,6 +73294,12 @@ MonoBehaviour:
   _NonWebGlUIElements:
   - {fileID: 646358227}
   _finishMenuContainer: {fileID: 1034142329}
+  _scoreField: {fileID: 1087999229}
+  _highscoreField: {fileID: 436744960}
+  _scoreText: 'Your Time: '
+  _highscoreText: 'Best Time: '
+  _scoreFormat: 1
+  _highscoreFormat: 1
 --- !u!1001 &1861477720
 PrefabInstance:
   m_ObjectHideFlags: 0

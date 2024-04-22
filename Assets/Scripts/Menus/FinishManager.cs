@@ -1,28 +1,37 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using static TimerUtils;
 
 public class FinishManager : MenuManager
 {
     [Header("UI Settings")]
     [SerializeField] private GameObject _finishMenuContainer;
 
-    // Finish State
-    private bool _isGameFinished = false;
+    [Header("UI Text Field Settings")]
+    [SerializeField] private TMP_Text _scoreField;
+    [SerializeField] private TMP_Text _highscoreField;
+    [SerializeField] private string _scoreText = "Your Time: ";
+    [SerializeField] private string _highscoreText = "Best Time: ";
+    [SerializeField] private TimerFormat _scoreFormat = TimerFormat.MM_SS_MS;
+    [SerializeField] private TimerFormat _highscoreFormat = TimerFormat.MM_SS_MS;
 
     // Events
     public static event Action OnRestartPressed;
 
     private void OnEnable()
     {
-        GameManager.OnGameEnded += TurnOnFinished;
+        TimerManager.EmitGameTimerCount += UpdateFields;
+        GameManager.OnGameEnded += OnGameEnd;
         GameManager.OnGameReset += TurnOffFinished;
     }
 
     private void OnDisable()
     {
-        GameManager.OnGameEnded -= TurnOnFinished;
+        TimerManager.EmitGameTimerCount -= UpdateFields;
+        GameManager.OnGameEnded -= OnGameEnd;
         GameManager.OnGameReset -= TurnOffFinished;
     }
 
@@ -32,12 +41,16 @@ public class FinishManager : MenuManager
         _finishMenuContainer.SetActive(false);
     }
 
+    private void OnGameEnd()
+    {
+        TurnOnFinished();
+    }
+
     //--------------------
     #region Finish State
 
     private void TurnOnFinished()
     {
-        ChangeFinishState(true);
         Time.timeScale = 0f;
         ChangeFinishUI(true);
         ChangeOverlayUI(true);
@@ -45,15 +58,9 @@ public class FinishManager : MenuManager
 
     private void TurnOffFinished()
     {
-        ChangeFinishState(false);
         Time.timeScale = 1f;
         ChangeFinishUI(false);
         ChangeOverlayUI(false);
-    }
-
-    private void ChangeFinishState(bool state)
-    {
-        _isGameFinished = state;
     }
 
     #endregion
@@ -68,6 +75,12 @@ public class FinishManager : MenuManager
         {
             _finishMenuContainer.SetActive(isGameFinished);
         }
+    }
+
+    private void UpdateFields(float gameTime)
+    {
+        _scoreField.SetText(_scoreText + GetFormattedTimeFromSeconds(_scoreFormat, gameTime));
+        _highscoreField.SetText(_highscoreText + GetFormattedTimeFromSeconds(_highscoreFormat, PlayerPrefs.GetFloat("Highscore")));
     }
 
     public void OnRestartButtonPressedUI()

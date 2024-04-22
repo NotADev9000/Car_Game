@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TimerUtils;
 
 public class UI_Timer_Countdown : UI_Timer
 {
@@ -25,7 +26,7 @@ public class UI_Timer_Countdown : UI_Timer
 
     private void ResetText()
     {
-        _textField.text = GetFormattedTimeFromSeconds(_timer.Count);
+        _textField.text = GetFormattedTimeFromSeconds(_timerFormat, _timer.Count);
         FadeText(1f, 0f);
     }
 

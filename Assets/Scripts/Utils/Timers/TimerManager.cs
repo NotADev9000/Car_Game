@@ -7,6 +7,7 @@ public class TimerManager : MonoBehaviour
     [SerializeField] private Timer_Countdown _introTimer;
 
     public static event Action OnIntroTimerFinished;
+    public static event Action<float> EmitGameTimerCount;
 
     private void OnEnable()
     {
@@ -26,6 +27,9 @@ public class TimerManager : MonoBehaviour
         _introTimer.OnCountdownEnded -= OnIntroCountdownFinished;
     }
 
+    //--------------------
+    #region Game State Events
+
     private void OnIntroStart()
     {
         StartTimer(_introTimer);
@@ -39,6 +43,8 @@ public class TimerManager : MonoBehaviour
     private void OnGameEnd()
     {
         _gameTimer.PauseTimer();
+        TrySaveHighscore();
+        EmitGameTimerCount?.Invoke(_gameTimer.Count);
     }
 
     private void OnGameReset()
@@ -52,6 +58,12 @@ public class TimerManager : MonoBehaviour
         OnIntroTimerFinished?.Invoke();
     }
 
+    #endregion
+    //--------------------
+
+    //--------------------
+    #region Timer Management
+
     private void StartTimer(Timer timer)
     {
         if (timer != null)
@@ -60,4 +72,30 @@ public class TimerManager : MonoBehaviour
             timer.StartTimer();
         }
     }
+
+    #endregion
+    //--------------------
+
+    //--------------------
+    #region Highscore
+
+    private void TrySaveHighscore()
+    {
+        if (IsHighscore()) SaveHighscore();
+    }
+
+    private bool IsHighscore()
+    {
+        float highscore = PlayerPrefs.GetFloat("Highscore");
+        return _gameTimer.Count < highscore || highscore == 0;
+    }
+
+    private void SaveHighscore()
+    {
+        PlayerPrefs.SetFloat("Highscore", _gameTimer.Count);
+    }
+
+    #endregion
+    //--------------------
+
 }
