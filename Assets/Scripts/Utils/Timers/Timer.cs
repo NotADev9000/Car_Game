@@ -6,7 +6,9 @@ using UnityEngine;
 public abstract class Timer : MonoBehaviour
 {
     public float Count { get; protected set; }
-    protected bool _isRunning;
+    public bool IsRunning { get; protected set; }
+
+    public event Action OnTimerChanged;
 
     private void Awake()
     {
@@ -17,19 +19,24 @@ public abstract class Timer : MonoBehaviour
 
     public abstract void ResetTimer();
 
-    public void StartTimer()
+    public virtual void StartTimer()
     {
-        _isRunning = true;
+        IsRunning = true;
     }
 
     public void PauseTimer()
     {
-        _isRunning = false;
+        IsRunning = false;
     }
 
     public void StopTimer()
     {
         PauseTimer();
         ResetTimer();
+    }
+
+    protected void InvokeTimerChange()
+    {
+        OnTimerChanged?.Invoke();
     }
 }

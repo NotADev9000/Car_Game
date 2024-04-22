@@ -6,11 +6,16 @@ public class Timer_Stopwatch : Timer
 {
     protected override void Update()
     {
-        if (_isRunning) Count += Time.deltaTime;
+        if (IsRunning)
+        {
+            Count += Time.deltaTime;
+            InvokeTimerChange();
+        }
     }
 
     public override void ResetTimer()
     {
         Count = 0f;
+        InvokeTimerChange();
     }
 }

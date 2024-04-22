@@ -12,18 +12,28 @@ public class UI_Timer : MonoBehaviour
         MM_SS_MS
     }
 
-    [SerializeField] private Timer _timer;
+    [SerializeField] protected Timer _timer;
     [SerializeField] private TimerFormat _timerFormat = TimerFormat.S;
 
-    private TMP_Text _textField;
+    protected TMP_Text _textField;
     private float _lastTimerValue;
+
+    protected virtual void OnEnable()
+    {
+        _timer.OnTimerChanged += UpdateTimerText;
+    }
+
+    protected virtual void OnDisable()
+    {
+        _timer.OnTimerChanged -= UpdateTimerText;
+    }
 
     private void Awake()
     {
         _textField = GetComponent<TMP_Text>();
     }
 
-    private void Update()
+    protected virtual void UpdateTimerText()
     {
         if (_lastTimerValue != _timer.Count)
         {
@@ -32,7 +42,7 @@ public class UI_Timer : MonoBehaviour
         }
     }
 
-    private string GetFormattedTimeFromSeconds(float seconds)
+    protected string GetFormattedTimeFromSeconds(float seconds)
     {
         switch (_timerFormat)
         {

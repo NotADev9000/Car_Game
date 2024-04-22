@@ -7,22 +7,32 @@ public class Timer_Countdown : Timer
 {
     [SerializeField] private float _startTime = 0f;
 
+    public event Action OnCountdownStarted;
     public event Action OnCountdownEnded;
 
     protected override void Update()
     {
-        if (_isRunning)
+        if (IsRunning)
         {
             Count -= Time.deltaTime;
-            //Debug.Log(Count);
 
             if (Count <= 0f)
             {
-                PauseTimer();
                 Count = 0f;
                 OnCountdownEnded?.Invoke();
+                PauseTimer();
+            }
+            else
+            {
+                InvokeTimerChange();
             }
         }
+    }
+
+    public override void StartTimer()
+    {
+        OnCountdownStarted?.Invoke();
+        base.StartTimer();
     }
 
     public override void ResetTimer()
