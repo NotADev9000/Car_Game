@@ -1,0 +1,33 @@
+Space Dust Racing - arcade vehicle re-creation:
+===================================
+- suspension
+	+ raycast from each corner towards ground (choose a length)
+			this is the spring
+	+ if raycast doesn't hit
+			nothing needs doing (physics can takeover e.g. gravity)
+	+ if hits
+			check how compressed spring is (scalar)
+				e.g. how long is the raycast from 1 - 0
+					0 being fully extended, 1 being where raycast started
+			force upwards along suspension depending on compression ratio
+				more compressed means more force
+				spring compression is a scalar for the force
+	+ raycast resuls to cache
+			compression ratio (0 - 1)
+			surface hit point (v3)
+			surface hit normal (v3)
+			
+- accelerating & braking
+	+ apply forward/backward force to vehicle
+	+ when moving project direction onto road plane
+			get average of all hit normals from the wheel raycasts
+			this stops vehicle launching into air/ground when car is tilted up or down
+	+ apply move force slightly lower than center of mass and towards front of vehicle
+			this helps tilt car forwards & back as it moves
+			
+- turning
+	+ apply torque to left/right input direction
+
+- traction
+	+ apply force in opposite direction to velocity but ONLY on the sides
+		can be done by projecting (dot product) velocity onto sideways unit vector (v3.right) and then applying that as a force in opposite direction (towards vehicle.) Maybe with a scalar too to tweak it.
